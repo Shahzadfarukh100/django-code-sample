@@ -1,0 +1,112 @@
+{% extends "skeletons/page.html" %}
+
+{% load extras crispy_forms_tags %}
+
+{% block page_title %}MGL Sensor Mappings{% endblock %}
+
+{% block body_id %}mgl-edit-page{% endblock %}
+
+{% block content %}
+
+    <form class='crispy'>
+        <p>You can select one of the typical configurations as a starting point, and then edit the individual fields to
+            match your exact aircraft configuration.</p>
+        <p>Any changes you make here will only affect <strong>future</strong> uploads.</p>
+        <br/>
+        <p><strong>Single Engine: </strong><a id="typical_single4">Typical 4-cyl</a> | <a id="typical_single6">Typical
+            6-cyl </a></p>
+        <p><strong>Twin Engine: </strong><a id="typical_twin4">Typical 4-cyl</a> | <a id="typical_twin6">Typical
+            6-cyl </a>
+        </p>
+    </form>
+
+    {% crispy form %}
+
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $('#typical_single4').click(function () {
+                $('form select').val('None');
+                $('#id_field_01_00').val('EGT1');
+                $('#id_field_01_01').val('EGT2');
+                $('#id_field_01_02').val('EGT3');
+                $('#id_field_01_03').val('EGT4');
+                $('#id_field_01_04').val('CHT1');
+                $('#id_field_01_05').val('CHT2');
+                $('#id_field_01_06').val('CHT3');
+                $('#id_field_01_07').val('CHT4');
+
+            });
+
+            $('#typical_single6').click(function () {
+                $('form select').val('None');
+                $('#id_field_01_00').val('EGT1');
+                $('#id_field_01_01').val('EGT2');
+                $('#id_field_01_02').val('EGT3');
+                $('#id_field_01_03').val('EGT4');
+                $('#id_field_01_04').val('EGT5');
+                $('#id_field_01_05').val('EGT6');
+                $('#id_field_01_06').val('CHT1');
+                $('#id_field_01_07').val('CHT2');
+                $('#id_field_01_08').val('CHT3');
+                $('#id_field_01_09').val('CHT4');
+                $('#id_field_01_10').val('CHT5');
+                $('#id_field_01_11').val('CHT6');
+            });
+
+
+            $('#typical_twin4').click(function () {
+                $('form select').val('None');
+                $('#id_field_01_00').val('L-EGT1');
+                $('#id_field_01_01').val('L-EGT2');
+                $('#id_field_01_02').val('L-EGT3');
+                $('#id_field_01_03').val('L-EGT4');
+                $('#id_field_01_04').val('L-CHT1');
+                $('#id_field_01_05').val('L-CHT2');
+                $('#id_field_01_06').val('L-CHT3');
+                $('#id_field_01_07').val('L-CHT4');
+
+                $('#id_field_02_00').val('R-EGT1');
+                $('#id_field_02_01').val('R-EGT2');
+                $('#id_field_02_02').val('R-EGT3');
+                $('#id_field_02_03').val('R-EGT4');
+                $('#id_field_02_04').val('R-CHT1');
+                $('#id_field_02_05').val('R-CHT2');
+                $('#id_field_02_06').val('R-CHT3');
+                $('#id_field_02_07').val('R-CHT4');
+
+            });
+
+            $('#typical_twin6').click(function () {
+                $('form select').val('None');
+                $('#id_field_01_00').val('L-EGT1');
+                $('#id_field_01_01').val('L-EGT2');
+                $('#id_field_01_02').val('L-EGT3');
+                $('#id_field_01_03').val('L-EGT4');
+                $('#id_field_01_04').val('L-EGT5');
+                $('#id_field_01_05').val('L-EGT6');
+                $('#id_field_01_06').val('L-CHT1');
+                $('#id_field_01_07').val('L-CHT2');
+                $('#id_field_01_08').val('L-CHT3');
+                $('#id_field_01_09').val('L-CHT4');
+                $('#id_field_01_10').val('L-CHT5');
+                $('#id_field_01_11').val('L-CHT6');
+
+                $('#id_field_02_00').val('R-EGT1');
+                $('#id_field_02_01').val('R-EGT2');
+                $('#id_field_02_02').val('R-EGT3');
+                $('#id_field_02_03').val('R-EGT4');
+                $('#id_field_02_04').val('R-EGT5');
+                $('#id_field_02_05').val('R-EGT6');
+                $('#id_field_02_06').val('R-CHT1');
+                $('#id_field_02_07').val('R-CHT2');
+                $('#id_field_02_08').val('R-CHT3');
+                $('#id_field_02_09').val('R-CHT4');
+                $('#id_field_02_10').val('R-CHT5');
+                $('#id_field_02_11').val('R-CHT6');
+            });
+        });
+    </script>
+{% endblock %}

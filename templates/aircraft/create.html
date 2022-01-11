@@ -1,0 +1,26 @@
+{% extends "skeletons/page.html" %}
+
+{% load extras crispy_forms_tags %}
+
+{% block page_title %}Add Aircraft{% endblock %}
+
+{% block body_id %}aircraft-create-page{% endblock %}
+
+{% block content %}
+
+    {% crispy form %}
+
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+
+            validate_aircraft_form('form', 'basics');
+            link_fields('aircraft_manufacturer', 'aircraft_model');
+            link_fields('engine_manufacturer', 'engine_model');
+            link_fields('engine_monitor_manufacturer', 'engine_monitor_model');
+
+        });
+    </script>
+{% endblock %}

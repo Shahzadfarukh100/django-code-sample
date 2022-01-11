@@ -1,0 +1,67 @@
+{% extends "problem/base.html" %}
+{% load static %}
+
+{% block background_top %}
+    <style>
+        #kt_body {
+            background-image: url({% static 'img/bg-04.png' %});
+        }
+
+        .header {
+            background-color: #6985fb;
+        }
+    </style>
+{% endblock %}
+
+{% block top_menu %}
+    {% include 'problem/nav_bar.html' with current_menu="events" %}
+{% endblock %}
+
+{% block container %}
+    <!--begin::Card-->
+    <div class="card card-custom card-shadowless rounded-top-0">
+        <!--begin::Body-->
+        <div class="card-body p-0">
+            <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
+                <div class="col-xl-12 col-xxl-10">
+                    <div class="d-flex justify-content-between border-bottom mb-5 pb-10">
+                        <div>
+                            <a href="{% url 'event_details' pk=event.id %}" class="btn btn-secondary font-weight-bolder text-capital px-9 py-4" data-wizard-type="action-next"><i class="ki ki-bold-long-arrow-back"></i> Back to event workspace</a>
+                        </div>
+                    </div>
+                    <form class="form" id="kt_form" method="POST" novalidate="novalidate">
+                     {% csrf_token %}
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <p>Are you sure you want to delete the event? This is an irreversible action. If you still want to delete the event, please confirm with your password.</p>
+                                <div class="form-group row">
+                                    <label class="col-xl-1 col-lg-2 col-md-2 col-sm-12 col-form-label">Password</label>
+                                    <div class="col-lg-4 col-xl-3 col-md-6 col-sm-12">
+                                        {{ form.password }}
+                                        {% include 'snippets/field_error.html' with errors=form.password.errors %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="d-flex justify-content-between pt-5">
+                                    <div>
+                                        <button type="submit"
+                                                class="btn btn-primary font-weight-bolder px-9 py-4 pull-right"
+                                                data-wizard-type="action-next"><i class="fa la-check-circle"></i>&nbsp;Confirm
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--end::Body-->
+    </div>
+    <!--end::Card-->
+{% endblock %}

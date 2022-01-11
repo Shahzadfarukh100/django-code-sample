@@ -1,0 +1,51 @@
+<table id="analyst-file-table" width="100%">
+    <thead>
+    <tr>
+        <th></th>
+        <th>
+            <h4>First Name</h4>
+        </th>
+        <th>
+            <h4>Last Name</h4>
+        </th>
+        <th>
+            <h4>Email</h4>
+        </th>
+        <th data-priority="1">
+            <h4>File Name</h4>
+        </th>
+        <th data-priority="3">
+            <h4>Tail #</h4>
+        </th>
+        <th data-priority="1">
+            <h4>Actions</h4>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for file in edfs %}
+        <tr data-url='/show_file/{{ file.pk }}/'>
+            <td></td>
+            {% with u=file.user %}
+                <td>{{ u.first_name }}</td>
+                <td>{{ u.last_name }}</td>
+                <td>{{ u.email }}</td>
+            {% endwith %}
+            <td>{{ file.name }}</td>
+            <td>{{ file.aircraft.registration_no }}</td>
+            <td>
+                <div class="actions-menu-button menu"></div>
+                <div class="actions-menu">
+                    <ul>
+                        <li><a href="/download/{{ file.pk }}/">Download</a></li>
+                    </ul>
+                </div>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="7"></td>
+    </tr>
+    </tfoot>
+</table>

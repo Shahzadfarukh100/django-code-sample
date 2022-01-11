@@ -1,0 +1,368 @@
+{% extends "problem/base.html" %}
+
+{% load static %}
+
+{% block background_top %}
+    <style>
+        #kt_body {
+            background-image: url({% static 'img/bg-04.png' %});
+        }
+
+        .header {
+            background-color: #6985fb;
+        }
+    </style>
+{% endblock %}
+
+{% block top_menu %}
+    {% include 'problem/nav_bar.html' with current_menu="events" %}
+{% endblock %}
+
+{% block extra_head_top %}
+    <style>
+        input[type=checkbox] {
+            width: 17px;
+            height: 17px;
+            position: relative;
+            top: 3px;
+            z-index: 1;
+            opacity: 1;
+        }
+        .label-inline {
+            display: inline !important;
+        }
+    </style>
+    {% include 'django_quill/media.html' %}
+{% endblock %}
+
+
+{% block container %}
+    <!--begin::Card-->
+    <div class="card card-custom card-shadowless rounded-top-0">
+        <!--begin::Body-->
+        <div class="card-body p-0">
+            <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
+                <div class="col-xl-12 col-xxl-12">
+                    <!--begin::Wizard Form-->
+                    <form class="form" id="kt_form" method="POST" enctype="multipart/form-data" novalidate="novalidate">
+                     {% csrf_token %}
+                        <div class="row justify-content-center">
+                            <div class="col-xl-12">
+                                <!--begin::Wizard Step 1-->
+                                <div class="my-5 step" data-wizard-type="step-content" data-wizard-state="current">
+                                    <h5 class="text-dark font-weight-bold mb-10">{{ heading }}:</h5>
+                                    <!--begin::Group-->
+                                    {% block form_fields %}
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-md-3 col-form-label text-left">Event Image</label>
+                                        <div class="col-md-9 col-lg-9 col-xl-9">
+                                            <div class="image-input image-input-outline" id="kt_user_add_avatar">
+                                                {% if form.instance.event_image %}
+
+                                                    <div class="image-input-wrapper"
+                                                         style="background-image: url( {{ form.instance.event_image.url }})"></div>
+                                                {% elif user.company.logo %}
+                                                    <div class="image-input-wrapper"
+                                                         style="background-image: url( {{ user.company.logo.url }})"></div>
+
+                                                {% else %}
+                                                    <div class="image-input-wrapper"
+                                                         style="background-image: url({% static 'img/default_event_image.png' %})"></div>
+                                                {% endif %}
+
+                                                <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                                                       data-action="change" data-toggle="tooltip" title=""
+                                                       data-original-title="Change event image">
+                                                    <i class="fa fa-pen icon-sm text-muted"></i>
+
+                                                    <input type="file" name="event_image" id="id_event_image"
+                                                           accept=".png, .jpg, .jpeg">
+                                                    <input type="checkbox" name="event_image-clear" id="event_image-clear_id">
+                                                    {% include 'snippets/field_error.html' with errors=form.event_image.errors %}
+
+                                                </label>
+                                                <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                                                      data-action="cancel" data-toggle="tooltip" title="Cancel event image">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-md-3 col-form-label">Event Name</label>
+                                        <div class="col-md-9 col-lg-9 col-xl-9">
+                                            {{ form.name }}
+                                            {% include 'snippets/field_error.html' with errors=form.name.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-md-3 col-form-label">Event Code</label>
+                                        <div class="col-md-9 col-lg-9 col-xl-9">
+                                            {{ form.code }}
+                                            {% include 'snippets/field_error.html' with errors=form.code.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-md-3 col-form-label">Event One Liner Description</label>
+                                        <div class="col-md-9 col-lg-9 col-xl-9">
+                                            {{ form.one_liner_description }}
+                                            {% include 'snippets/field_error.html' with errors=form.one_liner_description.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-md-3 col-form-label">Event External website</label>
+                                        <div class="col-md-9 col-lg-9 col-xl-9">
+                                            {{ form.url }}
+                                            {% include 'snippets/field_error.html' with errors=form.url.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-md-3 col-form-label">Event Description</label>
+                                        <div class="col-md-9 col-lg-9 col-xl-9">
+                                            {{ form.description }}
+                                            {% include 'snippets/field_error.html' with errors=form.description.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-md-3 col-form-label">Event Date From</label>
+                                        <div class="col-lg-3 col-xl-3 col-md-4 col-sm-6 col-xs-12">
+                                            <div class="input-group input-group-solid">
+                                                {{ form.date_from }}
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            {% include 'snippets/field_error.html' with errors=form.date_from.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-md-3 col-form-label">Event Date To</label>
+                                        <div class="col-lg-3 col-xl-3 col-md-4 col-sm-6 col-xs-12">
+                                            <div class="input-group input-group-solid">
+                                                {{ form.date_to }}
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            {% include 'snippets/field_error.html' with errors=form.date_to.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-md-3 col-form-label">Problem Submission Date From</label>
+                                        <div class="col-lg-3 col-xl-3 col-md-4 col-sm-6 col-xs-12">
+                                            <div class="input-group input-group-solid">
+                                                {{ form.problem_submission_date_from }}
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            {% include 'snippets/field_error.html' with errors=form.problem_submission_date_from.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-md-3 col-form-label">Problem Submission Date To</label>
+                                        <div class="col-lg-3 col-xl-3 col-md-4 col-sm-6 col-xs-12">
+                                            <div class="input-group input-group-solid">
+                                                {{ form.problem_submission_date_to }}
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            {% include 'snippets/field_error.html' with errors=form.problem_submission_date_to.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-md-3 col-form-label">Event Type</label>
+                                        <div class="col-lg-3 col-xl-3 col-md-4 col-sm-6 col-xs-12">
+                                            {{ form.event_type }}
+                                            {% include 'snippets/field_error.html' with errors=form.event_type.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-md-3 col-form-label">Event Internal Or External</label>
+                                        <div class="col-lg-3 col-xl-3 col-md-4 col-sm-6 col-xs-12">
+                                            {{ form.internal_or_external }}
+                                            {% include 'snippets/field_error.html' with errors=form.internal_or_external.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row" id="id_div_private_or_public">
+                                        <label class="col-xl-3 col-lg-3 col-md-3 col-form-label">Event Private Or Public</label>
+                                        <div class="col-lg-3 col-xl-3 col-md-4 col-sm-6 col-xs-12">
+                                            {{ form.private_or_public }}
+                                            {% include 'snippets/field_error.html' with errors=form.private_or_public.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-md-3 col-form-label">Event Physical Or Digital</label>
+                                        <div class="col-lg-3 col-xl-3 col-md-4 col-sm-6 col-xs-12">
+                                            {{ form.physical_or_digital }}
+                                            {% include 'snippets/field_error.html' with errors=form.physical_or_digital.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row pb-0 mb-0">
+                                        <div class="col-xs-0 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                                        <div class="col-lg-6 col-xl-6 col-md-9 col-sm-12 col-xs-12">
+                                            {{ form.host_has_problem_access }}<label class="col-xl-9 col-lg-9 label-inline">Event hosts have access to problems</label>
+                                            {% include 'snippets/field_error.html' with errors=form.host_has_problem_access.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row pb-0 mb-0" id="id_div_host_on_boards_members">
+                                        <div class="col-xs-0 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                                        <div class="col-lg-6 col-xl-6 col-md-9 col-sm-12 col-xs-12">
+                                            {{ form.host_on_boards_members }}<label class="col-xl-9 col-lg-9 label-inline">Event hosts can onboard users to problems</label>
+                                            {% include 'snippets/field_error.html' with errors=form.host_on_boards_members.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row pb-0 mb-0">
+                                        <div class="col-xs-0 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                                        <div class="col-lg-6 col-xl-6 col-md-9 col-sm-12 col-xs-12">
+                                            {{ form.problem_owner_on_boards_members }}<label class="col-xl-9 col-lg-9 label-inline">Problem owners can onboard users to problems</label>
+                                            {% include 'snippets/field_error.html' with errors=form.problem_owner_on_boards_members.errors %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row pb-0 mb-0" id="id_div_auto_accept_requests">
+                                        <div class="col-xs-0 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                                        <div class="col-lg-6 col-xl-6 col-md-9 col-sm-12 col-xs-12">
+                                            {{ form.auto_accept_requests }}<label class="col-xl-9 col-lg-9 label-inline">Auto accept event attend request</label>
+                                            {% include 'snippets/field_error.html' with errors=form.auto_accept_requests.errors %}
+                                        </div>
+                                    </div>
+                                    {% endblock %}
+
+                                    <!--end::Group-->
+                                </div>
+                                <!--end::Wizard Step 1-->
+
+                                <!--begin::Wizard Actions-->
+                                <div class="d-flex justify-content-between border-top pt-10 mt-15">
+                                    <div class="mr-2">
+                                        
+                                    </div>
+                                    <div>
+                                        <button type="submit"
+                                                class="btn btn-primary font-weight-bolder px-9 py-4  pull-right"
+                                                data-wizard-type="action-next"><i class="fa la-check-circle"></i> {{ button_label }}
+                                        </button>
+                                    </div>
+                                </div>
+                                <!--end::Wizard Actions-->
+                            </div>
+                        </div>
+                    </form>
+                    <!--end::Wizard Form-->
+                </div>
+            </div>
+        </div>
+        <!--end::Body-->
+    </div>
+    <!--end::Card-->
+{% endblock %}
+
+{% block footer %}
+    <script>
+        var KTAppSettings = {}
+    </script>
+
+    {{ block.super }}
+    <script src="{% static 'js/update-profile.js' %}"></script>
+    <script>
+
+        function show_auto_accept_requests() {
+            if($("#id_internal_or_external").val() === '1'){
+                $('#id_div_auto_accept_requests').show();
+            }else if ($("#id_internal_or_external").val() === '2' && $("#id_private_or_public").val() === '2'){
+                $('#id_div_auto_accept_requests').show();
+            }else {
+                $('#id_div_auto_accept_requests').hide();
+                $("#id_div_auto_accept_requests").prop('checked', false);
+            }
+
+        }
+
+        $(document).ready(function () {
+            $("#id_div_host_on_boards_members").hide();
+
+            $('#id_date_from').datepicker({format: 'dd/mm/yyyy', autoclose: true}).on('changeDate', function (e) {
+                if($('#id_problem_submission_date_from').val().trim() == '') {
+                    $('#id_problem_submission_date_from').val($(this).val())
+                }
+            });
+            $('#id_date_to').datepicker({format: 'dd/mm/yyyy', autoclose: true}).on('changeDate', function (e) {
+                if($('#id_problem_submission_date_to').val().trim() == '') {
+                    $('#id_problem_submission_date_to').val($(this).val())
+                }
+            });
+            $('#id_problem_submission_date_from,#id_problem_submission_date_to').datepicker({format: 'dd/mm/yyyy', autoclose:true});
+
+            $("#id_host_has_problem_access").is(':checked') ? $("#id_div_host_on_boards_members").show() : $("#id_div_host_on_boards_members").hide();
+            $("#id_internal_or_external").val() === '2' ? $("#id_div_private_or_public").show() : $("#id_div_private_or_public").hide();
+
+
+            $("#id_date_from").blur(function () {
+                if($('#id_problem_submission_date_from').val().trim() == '') {
+                    $('#id_problem_submission_date_from').val($(this).val())
+                }
+            });
+
+            $("#id_date_to").blur(function () {
+                if($('#id_problem_submission_date_to').val().trim() == '') {
+                    $('#id_problem_submission_date_to').val($(this).val())
+                }
+            });
+
+            $("#id_internal_or_external").change(function () {
+                $('#id_div_private_or_public').hide()
+                if ($(this).val() === '2') {
+                    $('#id_div_private_or_public').show()
+                }
+                show_auto_accept_requests();
+            });
+
+            $("#id_private_or_public").change(function () {
+                show_auto_accept_requests();
+            });
+
+            $("#id_host_has_problem_access").change(function () {
+                if ($(this).is(':checked')) {
+                    $("#id_div_host_on_boards_members").show();
+                } else {
+                    $("#id_div_host_on_boards_members").hide();
+                    $("#id_host_on_boards_members").prop('checked', false);
+                    $("#id_problem_owner_on_boards_members").prop('checked', true);
+                }
+            });
+
+            $("#id_host_on_boards_members").change(function () {
+                if (!($(this).is(':checked'))) {
+                    $("#id_problem_owner_on_boards_members").prop('checked', true);
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

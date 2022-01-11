@@ -1,0 +1,162 @@
+{% extends "problem/base.html" %}
+
+{% load static problem_tag thumbnail %}
+
+{% block background_top %}
+    <style>
+        #kt_body {
+            background-image: url({% static 'img/bg-12.png' %});
+        }
+
+        .header {
+            background-color: #f04d46;
+        }
+    </style>
+{% endblock %}
+
+{% block top_header %}
+{% endblock %}
+{% block mobile_header %}{% endblock %}
+
+{% block meta_data %}
+    <meta name="title" property="og:title" content="Can you solve this problem?">
+    <meta name="description" property="og:description" content="{{ problem.title }}">
+
+    {% if problem.problem_image %}
+        <meta name="image" property="og:image" content="{{ problem.problem_image.url }}">
+    {% elif problem.problem_owner.company.logo %}
+        <meta name="image" property="og:image" content="{{ problem.problem_owner.company.logo.url }}">
+    {% else %}
+        <meta name="image" property="og:image" content="{% static 'favicon/apple-touch-icon-120x120.png' %}">
+    {% endif %}
+
+{% endblock %}
+
+{% block container %}
+
+
+<div class="card card-custom gutter-b card-stretch px-10">
+
+    <!--begin::Header-->
+    <div class="card-footer pb-0 ml-0 pl-0">
+        {% if request.user.is_authenticated %}
+            {% if problem_submission_between_today %}
+                <a href="{% url 'problem_i_am_interested' problem_id=problem.id %}" onclick="return confirm('Are you sure?');" class="btn btn-primary">I AM INTERESTED</a>
+            {% endif %}
+
+        {% else %}
+            <a href="{% url 'account_signup' %}"
+               class="btn btn-primary btn-sm text-uppercase font-weight-bolder mt-5 mt-sm-0 mr-auto mr-sm-0 ml-sm-auto">I AM INTERESTED</a>
+        {% endif %}
+    </div>
+
+    <!--end::Header-->
+
+    <!--begin::Body-->
+    <div class="card-body pr-0 pl-0">
+        <!--begin::Details-->
+        <div class="d-flex mb-9">
+
+            <!--begin: Pic-->
+            <div class="flex-shrink-0 mr-7 mt-lg-0 mt-3">
+                <div class="symbol symbol-150 symbol-lg-120 symbol-md-120 symbol-sm-150">
+                    {% if problem.problem_image %}
+                        {% thumbnail problem.problem_image "120x120" crop="center" as problem_image %}
+                            <img alt="Pic" src="{{ problem_image.url }}" />
+                        {% endthumbnail %}
+                    {% elif problem.problem_owner.company.logo %}
+                        {% thumbnail problem.problem_owner.company.logo "120x120" crop="center" as company_logo %}
+                            <img alt="Pic" src="{{ company_logo.url }}" />
+                        {% endthumbnail %}
+                    {% else %}
+                        <img alt="Pic" src="{% static 'favicon/apple-touch-icon-120x120.png' %}" />
+                    {% endif %}
+                </div>
+            </div>
+            <!--end: Pic-->
+
+            <!--begin::Info-->
+            <div class="flex-grow-1">
+                <!--begin::Title-->
+                <div class="d-flex justify-content-between flex-wrap mt-1">
+
+                    <div class="d-flex flex-column mr-auto">
+                        <!--begin: Title-->
+                        <span class="card-title text-hover-primary font-weight-bolder font-size-h5 text-dark mb-1">{{ problem.title }}</span>
+                        <span class="text-muted font-weight-bold">{{ problem.company }}</span>
+                        <div class="ql-editor px-0 mx-0 mt-10 ">{{ problem.description.html|safe }}</div>
+                        <!--end::Title-->
+                    </div>
+
+                </div>
+            </div>
+            <!--end::Info-->
+        </div>
+
+        <!--begin::Items-->
+        <h4 class="card-title font-weight-bolder mb-0 pb-5">Goals</h4>
+        <div class="d-flex align-items-center flex-wrap mb-10">
+            {% for sdg in problem.problemproperties.sustainable_development_goals %}
+                <div class="flex-shrink-0 mr-7 mt-lg-0 mt-3">
+
+                    <div class="symbol symbol-50 symbol-lg-120">
+                        {% if sdg != '18' %}
+                            <img src="{% get_static_prefix %}img/inverted_sdg/{{ sdg }}.png" alt="image" data-toggle="tooltip" title="{{ sdg|sustainable_development_goals_display}}"/>
+                        {% else %}
+                            <div class="symbol symbol-45 symbol-company-goals">
+                                <span class="symbol-label" data-toggle="tooltip" title="Other">
+                                    <h3>Other</h3>
+                                </span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% for company_goal in problem.company_goals.all %}
+                <div class="flex-shrink-0 mr-7 mt-lg-0 mt-3">
+                    <div class="symbol symbol-50 symbol-lg-120" style="{% if company_goal.deactivated %}opacity: 0.5;{% endif %}">
+
+                        {% if company_goal.avatar %}
+                            <img src="{{ company_goal.avatar.url }}">
+                        {% else %}
+                            <div class="symbol symbol-45 symbol-company-goals">
+                            <span class="symbol-label" data-toggle="tooltip" title="{{ company_goal.name}}">
+                                <h3>{{ company_goal.abbreviated_name }}</h3>
+                            </span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!--End::Items-->
+        {% if problem.competency_tags.all %}
+        <h4 class="card-title font-weight-bolder mt-8 mb-0 pb-5">Competencies needed</h4>
+
+            <!--begin::Items-->
+            <div class="d-flex align-items-center flex-wrap ">
+
+
+                {% for tags in problem.competency_tags.all %}
+                    <!--begin::Item-->
+                    <div class="d-flex align-items-center mr-5 mb-2">
+                        <div class="d-flex flex-column text-dark-75">
+                            <span class="label label-xl label-outline-primary label-inline">{{ tags }}</span>
+                        </div>
+                    </div>
+                    <!--end::Item-->
+                {% endfor %}
+
+            </div>
+        {% endif %}
+        <!--End::Items-->
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+

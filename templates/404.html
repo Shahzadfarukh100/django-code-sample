@@ -1,0 +1,28 @@
+{% extends 'problem/base.html' %}
+{% load static %}
+
+
+{% block extra_head_top %}
+    <link href="{% static 'theme/assets/css/pages/error/error-6.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block body %}
+    <!--begin::Body-->
+	<body id="kt_body" class="quick-panel-right demo-panel-right offcanvas-right header-fixed subheader-enabled page-loading">
+		<!--begin::Main-->
+		<div class="d-flex flex-column flex-root">
+			<!--begin::Error-->
+			<div class="error error-6 d-flex flex-row-fluid bgi-size-cover bgi-position-center" style="background-image: url({% static 'theme/assets/media/error/bg6.jpg' %});">
+				<!--begin::Content-->
+				<div class="d-flex flex-column flex-row-fluid text-center">
+					<h1 class="error-title font-weight-boldest text-white mb-12" style="margin-top: 12rem;">Oops...</h1>
+					<p class="display-4 font-weight-bold text-white">Looks like something went wrong. We're working on it.</p>
+				</div>
+				<!--end::Content-->
+			</div>
+			<!--end::Error-->
+		</div>
+		<!--end::Main-->
+	</body>
+	<!--end::Body-->
+{% endblock %}

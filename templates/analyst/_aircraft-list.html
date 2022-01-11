@@ -1,0 +1,70 @@
+<table id="analyst-aircraft-table" width="100%">
+    <thead>
+    <tr>
+        <th></th>
+        <th>
+            <h4>UserId</h4>
+        </th>
+        <th>
+            <h4>First Name</h4>
+        </th>
+        <th>
+            <h4>Last Name</h4>
+        </th>
+        <th>
+            <h4>Email</h4>
+        </th>
+        <th data-priority="1">
+            <h4>Tail #</h4>
+        </th>
+        <th>
+            <h4>Aircraft</h4>
+        </th>
+        <th>
+            <h4>Engine</h4>
+        </th>
+        <th>
+            <h4>Status</h4>
+        </th>
+        <th>
+            <h4>Flights</h4>
+        </th>
+        <th data-priority="1">
+            <h4>Actions</h4>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for airplane in aircraft %}
+        <tr data-url="{% url 'analyst_view_aircraft' airplane.id %}">
+            <td></td>
+            <td>{{ airplane.user_id }}</td>
+            <td>{{ airplane.user.first_name }}</td>
+            <td>{{ airplane.user.last_name }}</td>
+            <td>{{ airplane.user.email }}</td>
+            <td>{{ airplane.registration_no }} (id: {{ airplane.id }})</td>
+            <td>{{ airplane.aircraft_manufacturer.name }} {{ airplane.aircraft_model.name }}</td>
+            <td>{{ airplane.engine_manufacturer.name }} {{ airplane.engine_model.name }}</td>
+            <td>{% if airplane.id in subscriptions %}Pro{% elif airplane.mx %}
+                Mx{% else %}Free{% endif %}</td>
+            <td>{{ airplane.flight_count }}</td>
+            <td>
+                <div class="actions-menu-button menu"></div>
+                <div class="actions-menu">
+                    <ul>
+                        <li><a href='{% url 'aircraft_edit' airplane.id %}'>Edit Aircraft</a></li>
+                        <li><a href="{% url 'files_upload_by_analyst' airplane.id %}">Upload&nbsp;File</a></li>
+                    </ul>
+                </div>
+            </td>
+
+
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="11"></td>
+    </tr>
+    </tfoot>
+</table>

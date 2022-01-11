@@ -1,0 +1,45 @@
+{% extends "skeletons/page.html" %}
+
+{% load extras crispy_forms_tags %}
+
+{% block page_title %}Complete Aircraft Profile{% endblock %}
+
+{% block body_id %}aircraft-complete-page{% endblock %}
+
+{% block content %}
+
+    {% if pro_form %}
+    <form class="crispy">
+        <div class="control-group">
+            <label class="control-label">Registration</label>
+            <div class="controls disabled">
+                <input type="text" disabled="1" value="{{ aircraft.registration_no }}"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Aircraft Manufacturer</label>
+            <div class="controls disabled">
+                <input type="text" disabled="1" value="{{ aircraft.aircraft_manufacturer.name }}"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Aircraft Model</label>
+            <div class="controls disabled">
+                <input type="text" disabled="1" value="{{ aircraft.aircraft_model.name }}"/>
+            </div>
+        </div>
+    </form>
+    {% endif %}
+    {% crispy form %}
+
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            link_fields('aircraft_manufacturer', 'aircraft_model');
+            link_fields('engine_manufacturer', 'engine_model');
+            link_fields('engine_monitor_manufacturer', 'engine_monitor_model');
+        });
+    </script>
+{% endblock %}

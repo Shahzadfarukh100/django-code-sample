@@ -1,0 +1,59 @@
+{% extends "skeletons/page.html" %}
+
+
+{% block page_title %}View All Aircraft{% endblock %}
+
+{% block body_id %}analyst-aircraft-list-page{% endblock %}
+
+{% block content %}
+
+    <p>You can search by name, email, tail #, Aircraft Make/Model, and Engine Make/Model.</p><br/>
+
+    <form id="id_form" class="crispy" method="POST"> {% csrf_token %}
+        <div class="control-group">
+            <label for="id_search_term" class="control-label">Search for:</label>
+            <div class="controls">
+                <input id="id_search_term" type="text" name="search_term" value="{{ search_term }}"/>
+            </div>
+        </div>
+        <input class="button" id="id_search" type="submit" value="Search"/>
+    </form>
+
+    <div id="result" width="100%">
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $("#id_form").submit(function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '/analyst/aircraft_search/',
+                    data: $("#id_form").serialize(),
+                    success: function (data) {
+                        $("#result").html(data);
+                        $(".actions-menu").hide();
+                        $('#analyst-aircraft-table').DataTable(
+                            {
+                                'order': [1],
+                                'columnDefs': [{
+                                    className: 'control',
+                                    orderable: false,
+                                    targets: 0
+                                }]
+                            });
+                        tableClickableRows();
+                        tableDropDownMenu();
+                    },
+                    beforeSend: function (xhr) {
+                        $("#result").html("<div class='center'><h2>Searching...</h2><div class='wait-indicator'></div></div>");
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+{% endblock %}
